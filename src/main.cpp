@@ -12,7 +12,8 @@ int main() {
     window.setFramerateLimit(120);
 
     Camera camera({-0.5f, 0.0f}, {3.0f, 3.0f * (float(vm.height) / float(vm.width))});
-    FractalShader fractalShader("shaders/mandelbrot.frag", window.getSize());
+    //shaders/mandelbrot.frag;
+    FractalShader fractalShader("shaders/julia.frag", window.getSize());
     fractalShader.setBaseIterations(300, 140);
 
     sf::Font font;
