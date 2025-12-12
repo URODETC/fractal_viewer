@@ -7,9 +7,9 @@
 #include "FractalShader.h"
 
 int main() {
-    sf::VideoMode vm(1920, 1080);
+    sf::VideoMode vm(2560, 1440);
     sf::RenderWindow window(vm, "Fractal Viewer");
-    window.setFramerateLimit(120);
+    window.setFramerateLimit(240);
 
     Camera camera({-0.5f, 0.0f}, {3.0f, 3.0f * (float(vm.height) / float(vm.width))});
     //shaders/mandelbrot.frag;
@@ -27,11 +27,12 @@ int main() {
     float fps = 60.0f;
     sf::Vector2i lastMousePos;
     bool dragging = false;
-
+    bool toggleChangeConstant = true;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window.close();
             if (event.type == sf::Event::Resized) {
                 sf::Vector2u newSize(event.size.width, event.size.height);
                 camera = Camera(camera.getCenter(), {
@@ -51,6 +52,8 @@ int main() {
             if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
                 dragging = false;
             }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::LShift) toggleChangeConstant = false;
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::LShift) toggleChangeConstant = true;
         }
 
         if (dragging) {
@@ -65,16 +68,17 @@ int main() {
             }
         }
 
+        sf::Vector2i mouse = sf::Mouse::getPosition(window);
+        double mx = camera.getCenter().x + (mouse.x / double(window.getSize().x) - 0.5) * camera.getScale().x;
+        double my = camera.getCenter().y + (mouse.y / double(window.getSize().y) - 0.5) * camera.getScale().y;
 
-
+        if (toggleChangeConstant) fractalShader.ChangeC(mx, my);
         fractalShader.update(camera);
 
         window.clear();
         fractalShader.draw(window);
 
-        sf::Vector2i mouse = sf::Mouse::getPosition(window);
-        double mx = camera.getCenter().x + (mouse.x / double(window.getSize().x) - 0.5) * camera.getScale().x;
-        double my = camera.getCenter().y + (mouse.y / double(window.getSize().y) - 0.5) * camera.getScale().y;
+
 
         float dt = fpsClock.restart().asSeconds();
         if (dt > 0.0f) fps = 0.95f*fps + 0.05f*(1.0f/dt);

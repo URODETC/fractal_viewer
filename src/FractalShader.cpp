@@ -41,3 +41,8 @@ void FractalShader::draw(sf::RenderTarget& target)
 {
     target.draw(screen, &shader);
 }
+
+void FractalShader::ChangeC(float a, float b) {
+    shader.setUniform("u_ca", a);
+    shader.setUniform("u_cb", b);
+}

@@ -10,7 +10,7 @@ class FractalShader {
     void update(const Camera& camera);
     void draw(sf::RenderTarget& target);
     void setBaseIterations(int base, int perZoom);
-
+    void ChangeC(float a, float b);
     private:
     sf::Shader shader;
     sf::RectangleShape screen;

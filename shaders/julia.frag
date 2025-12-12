@@ -5,6 +5,8 @@ uniform vec2 u_center;
 uniform vec2 u_scale;
 uniform int u_maxIterations;
 uniform float u_escapeRadius;
+uniform float u_ca;
+uniform float u_cb;
 
 out vec4 FragColor;
 
@@ -16,7 +18,7 @@ vec3 hsv2rgb(vec3 c){
 
 void main() {
     vec2 uv = gl_FragCoord.xy / u_resolution;
-    vec2 c = vec2(-0.8, .156);
+    vec2 c = vec2(u_ca, u_cb);
 
     int iter = 0;
     float mu;
